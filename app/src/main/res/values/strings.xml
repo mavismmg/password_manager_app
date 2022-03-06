@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="welcome">Welcome!</string>
+    <string name="username_login">Username</string>
+    <string name="password_login">Password</string>
+    <string name="email_login">Email</string>
+    <string name="register">Register</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="email_register">Email</string>
+    <string name="username_register">Username</string>
+    <string name="password_register">Password</string>
+    <string name="login">Login</string>
+    <string name="i_do_not_have_an_account">I do not have an account</string>
+    <string name="facebook_app_id">480392250254981</string>
+    <string name="fb_login_protocol_scheme">fb480392250254981</string>
+    <string name="facebook_client_token">56789</string>
+<!--    <string name="default_web_client_id">defaultWebClient</string>-->
+</resources>
