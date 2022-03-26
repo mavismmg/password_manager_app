@@ -1,10 +1,13 @@
 package com.example.chatapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -16,11 +19,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_register.*
+import java.util.concurrent.Executor
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -37,13 +43,49 @@ class LoginActivity : AppCompatActivity() {
             facebookLogin()
         }
 
+        // googleLogin() implementation missing.
 //        google_login.setOnClickListener {
 //            googleLogin()
 //        }
 
+        biometric_login.setOnClickListener {
+            biometricLogin()
+        }
+
         dont_have_account_login.setOnClickListener {
             userHaveAnAccount()
         }
+    }
+
+    private fun biometricLogin() : Unit {
+        executor = ContextCompat.getMainExecutor(this)
+        biometricPrompt = BiometricPrompt(this@LoginActivity, executor, object: BiometricPrompt.AuthenticationCallback() {
+            @SuppressLint("SetTextI18n")
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                biometric_login.text = "Authentication Error: $errString"
+                Toast.makeText(this@LoginActivity, "Authentication Error: $errString", Toast.LENGTH_SHORT).show()
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                biometric_login.text = "Authentication Successful"
+                Toast.makeText(this@LoginActivity, "Authentication Successful", Toast.LENGTH_SHORT).show()
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                biometric_login.text = "Authentication Failed"
+                Toast.makeText(this@LoginActivity, "Authentication Failed", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Biometric Authentication")
+            .setNegativeButtonText("button_loginActivity_btt")
+            .build()
     }
 
     private fun userLogin() : Unit {

@@ -51,4 +51,8 @@ dependencies {
 
     // Facebook dependencies
     implementation 'com.facebook.android:facebook-login:latest.release'
+
+    // Biometric dependencies
+    //implementation "androidx.biometric:biometric-ktx:1.2.0-alpha04"
+    implementation "androidx.biometric:biometric:1.1.0"
 }
